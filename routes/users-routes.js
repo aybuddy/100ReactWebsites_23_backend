@@ -1,22 +1,20 @@
-// const express = require('express');
+const express = require('express');
+const { check } = require('express-validator');
 
-// const router = express.Router();
+const usersControllers = require('../controllers/users-controllers');
 
-// const DUMMY_PLACES = [
-//   {
-//     id: 'p1',
-//     title: 'Philadelphia Art Museum',
-//     description: 'Rocky made this world famous by running up the steps',
-//     location: {
-//       lat: 39.9655697,
-//       lng: -75.1831548,
-//     },
-//     address: '2600 Benjamin Franklin Pkwy, Philadelphia, PA 19130',
-//     creator: 'u1',
-//   },
+const router = express.Router();
 
-// router.get('/:uid', (req, res, next) => {
-//   res.json({message: 'It is working'})
-// })
+router.get('/', usersControllers.getUsers);
+router.post(
+  '/signup',
+  [
+    check('name').not().isEmpty(),
+    check('email').normalizeEmail().isEmail(),
+    check('password').isLength({ min: 6 }),
+  ],
+  usersControllers.signup
+);
+router.post('/login', usersControllers.login);
 
-// module.exports = router;
+module.exports = router;
