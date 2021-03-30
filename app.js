@@ -1,8 +1,6 @@
 const express = require('express');
-const dotenv = require('dotenv');
-// const bodyParser = require('body-parser')
-
-dotenv.config({ path: './env' });
+const mongoose = require('mongoose');
+require('dotenv').config();
 
 const placesRoutes = require('./routes/places-routes');
 const usersRoutes = require('./routes/users-routes');
@@ -28,4 +26,12 @@ app.use((error, req, res, next) => {
   res.json({ message: error.message || 'An unknown error occurred!' });
 });
 
-app.listen(5000);
+const uri = process.env.ATLAS_URI;
+mongoose
+  .connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => {
+    app.listen(5000);
+  })
+  .catch((err) => {
+    console.log(err);
+  });
