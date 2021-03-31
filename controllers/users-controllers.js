@@ -21,6 +21,7 @@ const signup = async (req, res, next) => {
       new HttpError('Invalid inputs passed, please check your data', 422)
     );
   }
+
   const { name, email, password } = req.body;
 
   let existingUser;
@@ -42,8 +43,7 @@ const signup = async (req, res, next) => {
   const createdUser = new User({
     name,
     email,
-    image:
-      'https://upload.wikimedia.org/wikipedia/commons/8/85/Elon_Musk_Royal_Society_%28crop1%29.jpg',
+    image: req.file.path,
     password,
     places: [],
   });
